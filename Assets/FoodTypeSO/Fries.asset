@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 918c1b198535fe24fa53e5389885317a, type: 3}
+  m_Name: Fries
+  m_EditorClassIdentifier: 
+  visualPrefab: {fileID: 5393388661399880911, guid: e5f8c280dc60d3d41be063d16dd5b945, type: 3}
+  DisplayName: Fries
+  BaseCookTime: 2
+  BurnTime: 4
