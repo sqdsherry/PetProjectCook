@@ -1,45 +1,28 @@
-using System;
 using UnityEngine;
 
-public sealed class StoveMono : MonoBehaviour, IAppliance, IInteractable
+public sealed class TableMono : MonoBehaviour, IInteractable
 {
     [SerializeField] private FoodTypeSO debugType;
-    [SerializeField] private FoodTypeSO cookType;
-    [SerializeField] private FoodItemWorld foodItemPrefab;
     [SerializeField] private Transform itemPlacePosition;
 
     private FoodItem placed;
     private FoodItemWorld placedVisual;
 
-    private readonly ICookingMethod method = new Stove();
-    public ICookingMethod Method => method;
     public bool IsOccupied => placed != null;
 
     public void Place(FoodItem item)
     {
         if (IsOccupied) return;
         placed = item;
-        placed.ApplyMethod(Method);
     }
     public FoodItem Remove()
     {
-        if (!IsOccupied) return null;   
+        if (!IsOccupied) return null;
         placed.ClearMethod();
         var outItem = placed;
         placed = null;
         return outItem;
     }
-
-    public void Tick(float deltaTime)
-    {
-        if (IsOccupied) placed?.Tick(deltaTime);
-    }
-
-    private void Update()
-    {
-        Tick(Time.deltaTime);
-    }
-
 
     // Временный дебаг
     private void Start()
@@ -61,14 +44,13 @@ public sealed class StoveMono : MonoBehaviour, IAppliance, IInteractable
         // Игрок ставит предмет на плиту
         if (player.HasItem && !IsOccupied)
         {
-            if (player.HeldItem.Type != cookType) return;
-
+            Debug.Log($"Попытка поставить {player.HeldItem.Type.DisplayName}");
             FoodItem item = player.HeldItem;
             player.Drop();
             Place(item);
 
             Vector3 spawnPosition = itemPlacePosition != null ? itemPlacePosition.position : transform.position + Vector3.up;
-            placedVisual = Instantiate(foodItemPrefab, transform.position + Vector3.up, Quaternion.identity);
+            placedVisual = Instantiate(item.Type.visualPrefab, transform.position + Vector3.up, Quaternion.identity);
             placedVisual.InitializeWithItem(item);
             placedVisual.transform.SetParent(transform);
 
@@ -78,12 +60,8 @@ public sealed class StoveMono : MonoBehaviour, IAppliance, IInteractable
         else if (!player.HasItem && IsOccupied)
         {
             FoodItem item = Remove();
-
-            if (foodItemPrefab != null)
-            {
-                Destroy(placedVisual.gameObject);
-                placedVisual = null;
-            }
+            Destroy(placedVisual.gameObject);
+            placedVisual = null;
 
             player.PickUp(item);
 

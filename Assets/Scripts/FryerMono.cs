@@ -3,13 +3,14 @@ using UnityEngine;
 public sealed class FryerMono : MonoBehaviour, IAppliance, IInteractable
 {
     [SerializeField] private FoodTypeSO debugType;
+    [SerializeField] private FoodTypeSO cookType;
     [SerializeField] private FoodItemWorld foodItemPrefab;
     [SerializeField] private Transform itemPlacePosition;
 
     private FoodItem placed;
     private FoodItemWorld placedVisual;
 
-    private readonly ICookingMethod method = new Stove();
+    private readonly ICookingMethod method = new Fryer();
     public ICookingMethod Method => method;
     public bool IsOccupied => placed != null;
 
@@ -59,6 +60,9 @@ public sealed class FryerMono : MonoBehaviour, IAppliance, IInteractable
         // Игрок ставит предмет на плиту
         if (player.HasItem && !IsOccupied)
         {
+            if (player.HeldItem.Type != cookType) return;
+
+            Debug.Log($"Попытка поставить {player.HeldItem.Type.DisplayName}");
             FoodItem item = player.HeldItem;
             player.Drop();
             Place(item);
