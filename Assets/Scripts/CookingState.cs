@@ -1,5 +1,6 @@
 public sealed class CookingState : IFoodState
 {
+    public FoodStateType Type => FoodStateType.Cooking;
     public void Enter(FoodItem item) 
     {
         item.Progress.ResetForCooking(item.Type.BaseCookTime, item.Type.BurnTime);

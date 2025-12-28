@@ -1,20 +1,20 @@
+using UnityEngine;
+
 public class OrderInstance 
 {
-    private OrderSO orderSO;
+    public OrderSO Template { get; }
 
-    public OrderInstance(OrderSO orderSO)
+    public OrderInstance(OrderSO template)
     {
-        this.orderSO = orderSO;
+        Template = template;
     }
 
-    public OrderSO Template { get; }
     public bool IsCompleted { get; private set; }
 
     public bool TryCompleteOrder(FoodItem item)
     {
-        if (IsCompleted) return false;
-        if (!Template.IsSatisfiedBy(item)) return false;
-        IsCompleted = true;
-        return true;
+        Debug.Log("OrderInstance: TryCompleteOrder called");
+
+        return Template.IsSatisfiedBy(item);
     }
 }

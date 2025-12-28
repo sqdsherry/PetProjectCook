@@ -58,7 +58,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (currentTarget is MonoBehaviour mb) 
         {
-            Debug.Log($"Взаимодействую с: {mb.gameObject.name} на позиции {mb.transform.position}");
+            Debug.Log($"Взаимодействую с: {mb.gameObject.name}");
             currentTarget.Interact(this);
         }
     }

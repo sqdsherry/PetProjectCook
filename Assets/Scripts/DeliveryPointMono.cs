@@ -16,6 +16,9 @@ public class DeliveryPointMono : MonoBehaviour, IInteractable
 
     public void Interact(PlayerInteraction player)
     {
+        if (!player.HasItem)
+            return;  
+
         if (orderManager.TryDeliver(player.HeldItem))
             player.Drop();
     }

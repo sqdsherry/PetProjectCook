@@ -23,7 +23,7 @@ public sealed class FryerMono : MonoBehaviour, IAppliance, IInteractable
     public FoodItem Remove()
     {
         if (!IsOccupied) return null;
-        placed.ClearMethod();
+
         var outItem = placed;
         placed = null;
         return outItem;

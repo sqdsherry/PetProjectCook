@@ -3,6 +3,8 @@ using UnityEngine;
 public sealed class FoodItem
 {
     public IFoodState CurrentState { get; private set; }  // <Ч текущее состо€ние (сырое, приготовленное, сгоревшее)
+    public FoodStateType CurrentStateType => CurrentState.Type;
+
     public FoodTypeSO Type { get; }   // <Ч ссылка на ассет
     public ICookingMethod CurrentMethod { get; private set; }
     public CookingProgress Progress { get; } = new CookingProgress();
@@ -53,4 +55,11 @@ public sealed class FoodItem
             SetState(new CookingState());
         }
     }
+}
+public enum FoodStateType
+{
+    Raw,
+    Cooking,
+    Cooked,
+    Burned
 }

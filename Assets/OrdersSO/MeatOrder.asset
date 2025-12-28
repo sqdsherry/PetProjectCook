@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: MeatOrder
   m_EditorClassIdentifier: Assembly-CSharp::OrderSO
   FoodType: {fileID: 11400000, guid: 2859262432f571b44b47b0945647da8f, type: 2}
+  RequiredState: 2
+  orderInfo: Normal coked meat
