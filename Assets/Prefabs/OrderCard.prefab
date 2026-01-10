@@ -167,8 +167,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 968603251461887539}
   - {fileID: 7804996841809647162}
+  - {fileID: 968603251461887539}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -226,8 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3365c5bc6e52b51469e70808174da2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  orderNumberText: {fileID: 0}
-  orderInfoText: {fileID: 0}
+  orderNumberText: {fileID: 2738876861867761346}
+  orderInfoText: {fileID: 7723025866505039171}
 --- !u!1 &8899850824105517107
 GameObject:
   m_ObjectHideFlags: 0

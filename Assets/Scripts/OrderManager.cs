@@ -1,16 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System;
 
+[DefaultExecutionOrder(-100)]
 public class OrderManager : MonoBehaviour
 {
     public static OrderManager Instance;
 
     [SerializeField] private List<OrderSO> availableOrders;
-    [SerializeField] private List<OrderInstance> activeOrders = new();
-    [SerializeField] private TMP_Text[] orderText;
+    private List<OrderInstance> activeOrders = new();
 
     public event Action<OrderInstance> OnOrderSpawned;
     public event Action<OrderInstance> OnOrderCompleted;
@@ -34,7 +32,7 @@ public class OrderManager : MonoBehaviour
 
     public void SpawnOrder()
     {
-        OrderSO orderSO = availableOrders[UnityEngine.Random.Range(0, activeOrders.Count)];
+        OrderSO orderSO = availableOrders[UnityEngine.Random.Range(0, activeOrders.Count - 1)];
 
         OrderInstance instance = new OrderInstance(orderSO);
         activeOrders.Add(instance);
@@ -48,15 +46,6 @@ public class OrderManager : MonoBehaviour
     {
         activeOrders.Remove(order);
         OnOrderCompleted?.Invoke(order);
-    }
-
-    public void ClearOrders()
-    {
-        activeOrders.Clear();
-        foreach (var text in orderText)
-        {
-            text.text = "";
-        }
     }
 
     public bool TryDeliver(FoodItem item)

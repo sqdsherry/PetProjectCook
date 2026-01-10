@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,8 +11,7 @@ public class OrderCardUI : MonoBehaviour
 
     public void BindOrder(OrderInstance order, int orderNumber)
     {
-        boundOrder = order;
-        orderNumberText.text = $"Order {orderNumber + 1}";
-        orderInfoText.text = order.Template.orderInfo;
+        orderNumberText.text = $"{orderNumber}";
+        orderInfoText.text = order.Template.FoodType.DisplayName;
     }
 }
