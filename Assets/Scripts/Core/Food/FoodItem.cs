@@ -1,16 +1,29 @@
+using System;
 using UnityEngine;
 using Zenject;
 
 public sealed class FoodItem
 {
     public class Factory : PlaceholderFactory<FoodTypeSO, FoodItem> { }
-    public IFoodState CurrentState { get; private set; }  // <Ч текущее состо€ние (сырое, приготовленное, сгоревшее)
+
+    private IFoodState _currentState;
+    public IFoodState CurrentState
+    {
+        get => _currentState;
+        set
+        {
+            _currentState = value;
+            OnStateChanged?.Invoke(_currentState); 
+        }
+    }
     public FoodStateType CurrentStateType => CurrentState.Type;
 
-    public FoodTypeSO Type { get; }   // <Ч ссылка на ассет
+    public FoodTypeSO Type { get; }   
     public ICookingMethod CurrentMethod { get; private set; }
     public CookingProgress Progress { get; } = new CookingProgress();
     public float CurrentCookSpeed => CurrentMethod?.GetCookSpeed(Type) ?? 0f;
+
+    public event Action<IFoodState> OnStateChanged;
 
     public FoodItem(FoodTypeSO type)
     {

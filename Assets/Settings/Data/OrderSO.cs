@@ -10,21 +10,21 @@ public class OrderSO : ScriptableObject
 
     public bool IsSatisfiedBy(FoodItem item)
     {
-        Debug.Log($"Проверка предмета");
+        bool isTypeMatch = item.Type == FoodType;
+        bool isStateMatch = item.CurrentStateType == RequiredState;
 
-        if (item.Type != FoodType)
+        if (!isTypeMatch)
         {
-            Debug.Log($"Тип не совпадает. Требуется {FoodType.DisplayName}, а получен {item.Type.DisplayName}");
-
-            if (item.CurrentStateType != RequiredState) {
-                Debug.Log($"Состояние не совпадает, клиент не доволен");
-                // - 50% к награде за заказ
-                Debug.Log($"Проверяем заказ: Food={item.Type.DisplayName}, CurrentState={item.CurrentState}, RequiredState={RequiredState}");
-            }
+            Debug.Log($"Тип не совпадает: требуется {FoodType.DisplayName}");
             return false;
         }
-        else
-            return true;
 
+        if (!isStateMatch)
+        {
+            Debug.Log($"Состояние не совпадает: требуется {RequiredState}, а еда {item.CurrentStateType}");
+            return false;
+        }
+
+        return true;
     }
 }

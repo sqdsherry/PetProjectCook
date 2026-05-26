@@ -1,39 +1,10 @@
 using UnityEngine;
 using Zenject;
 
-public sealed class TableMono : MonoBehaviour, IInteractable
+public sealed class TableMono : BaseApplianceMono
 {
     [SerializeField] private FoodTypeSO debugType;
-    [SerializeField] private Transform itemPlacePosition;
 
-    private FoodItem placed;
-    private FoodItemWorld placedVisual;
-
-    public bool IsOccupied => placed != null;
-
-    private DiContainer _container;
-
-    [Inject]
-    public void Construct(DiContainer container)
-    {
-        _container = container;
-    }
-
-    public void Place(FoodItem item)
-    {
-        if (IsOccupied) return;
-        placed = item;
-    }
-    public FoodItem Remove()
-    {
-        if (!IsOccupied) return null;
-        placed.ClearMethod();
-        var outItem = placed;
-        placed = null;
-        return outItem;
-    }
-
-    // Временный дебаг
     private void Start()
     {
         if (debugType != null)
@@ -43,63 +14,34 @@ public sealed class TableMono : MonoBehaviour, IInteractable
         }
     }
 
-    public bool CanInteract(PlayerInteraction player)
+    public override bool CanInteract(PlayerInteraction player)
     {
-        return (player.HasItem && !IsOccupied) || (!player.HasItem && IsOccupied);
+        if (player == null) return false;
+        return base.CanInteract(player);
     }
 
-    public void Interact(PlayerInteraction player)
+    public override string GetInteractionText()
     {
-        // Игрок ставит предмет на плиту
-        if (player.HasItem && !IsOccupied)
+        if (IsOccupied && PlacedData != null)
         {
-            Debug.Log($"Попытка поставить {player.HeldItem.Type.DisplayName}");
-            FoodItem item = player.HeldItem;
-            player.Drop();
-            Place(item);
-
-            Vector3 spawnPosition = itemPlacePosition != null ? itemPlacePosition.position : transform.position + Vector3.up;
-            placedVisual = Instantiate(item.Type.visualPrefab, transform.position + Vector3.up, Quaternion.identity);
-            placedVisual.InitializeWithItem(item);
-            placedVisual.transform.SetParent(transform);
-
-            Debug.Log($"Поставил {item.Type.DisplayName} на плиту");
+            string stateText = GetStateText(PlacedData);
+            return $"Take {PlacedData.Type.DisplayName} ({stateText})";
         }
-        // Игрок снимает предмет с плиты
-        else if (!player.HasItem && IsOccupied)
-        {
-            FoodItem item = Remove();
-            Destroy(placedVisual.gameObject);
-            placedVisual = null;
 
-            player.PickUp(item);
-
-            Debug.Log($"Взял {item.Type.DisplayName} с плиты");
-        }
-    }
-
-    public string GetInteractionText()
-    {
-        if (IsOccupied)
-        {
-            string stateText = GetStateText(placed);
-            return $"Взять {placed.Type.DisplayName} ({stateText})";
-        }
-        else
-        {
-            return "Поставить на плиту";
-        }
+        return "Place on table";
     }
 
     private string GetStateText(FoodItem item)
     {
+        if (item == null) return "unknown";
+
         return item.CurrentState switch
         {
-            RawState => "сырой",
-            CookingState => "готовится",
-            CookedState => "готовый",
-            BurnedState => "сгоревший",
-            _ => "неизвестно"
+            RawState => "Raw",
+            CookingState => "Cooking",
+            CookedState => "Cooked",
+            BurnedState => "Burned",
+            _ => "unknown"
         };
     }
 }

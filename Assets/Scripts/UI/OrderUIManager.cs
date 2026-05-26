@@ -8,7 +8,8 @@ public class OrderUIManager : MonoBehaviour
     [SerializeField] private OrderCardUI orderCardPrefab;
 
     private OrderManager _orderManager;
-    private Dictionary<OrderInstance, OrderCardUI> cards = new();
+    private Dictionary<OrderInstance, OrderCardUI> _cards = new();
+    private int _totalOrdersSpawned;
 
     [Inject]
     public void Construct(OrderManager orderManager)
@@ -19,30 +20,32 @@ public class OrderUIManager : MonoBehaviour
     private void OnEnable()
     {
         _orderManager.OnOrderSpawned += HandleOrderSpawned;
-        _orderManager.OnOrderCompleted += HandleOrderCompleted;
+        _orderManager.OnOrderCompleted += HandleOrderRemoved;
+        _orderManager.OnOrderExpired += HandleOrderRemoved;
     }
 
     private void OnDisable()
     {
         _orderManager.OnOrderSpawned -= HandleOrderSpawned;
-        _orderManager.OnOrderCompleted -= HandleOrderCompleted;
+        _orderManager.OnOrderCompleted -= HandleOrderRemoved;
+        _orderManager.OnOrderExpired -= HandleOrderRemoved;
     }
 
     private void HandleOrderSpawned(OrderInstance order)
     {
-        int number = cards.Count + 1;
+        _totalOrdersSpawned++;
 
         var card = Instantiate(orderCardPrefab, container);
-        card.BindOrder(order, number);
+        card.BindOrder(order, _totalOrdersSpawned);
 
-        cards.Add(order, card);
+        _cards.Add(order, card);
     }
 
-    private void HandleOrderCompleted(OrderInstance order)
+    private void HandleOrderRemoved(OrderInstance order)
     {
-        if (!cards.TryGetValue(order, out var card)) return;
+        if (!_cards.TryGetValue(order, out var card)) return;
 
         Destroy(card.gameObject);
-        cards.Remove(order);
+        _cards.Remove(order);
     }
 }

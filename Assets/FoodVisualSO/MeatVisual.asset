@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8578848b87eaa94e99dcb967d0d85e7, type: 3}
+  m_Name: MeatVisual
+  m_EditorClassIdentifier: 
+  rawPrefab: {fileID: 6460735784283377830, guid: 9ff03a61677438a4ca30f389d2cab451, type: 3}
+  cookedPrefab: {fileID: 7061456000306125205, guid: 03231b0523fc0d743a8721fe5d632036, type: 3}
+  burnedPrefab: {fileID: 72003410473760918, guid: 07a863f0c7050d949a5fa2f485e6beaf, type: 3}

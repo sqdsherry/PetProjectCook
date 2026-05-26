@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class OrderCardUI : MonoBehaviour
+public sealed class OrderCardUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text orderNumberText;
     [SerializeField] private TMP_Text orderNameText;

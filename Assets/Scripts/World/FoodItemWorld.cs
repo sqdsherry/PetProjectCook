@@ -1,50 +1,30 @@
 using UnityEngine;
+using Zenject;
 
 public class FoodItemWorld : MonoBehaviour, IHoldable, IInteractable
 {
     [SerializeField] private FoodTypeSO foodType;
-    [SerializeField] private Renderer itemRenderer;
 
     FoodItem foodItem;
     private bool isHeld = false;
 
-    private void Start()
+    private FoodVisualizer _visualizer;
+    private FoodItemWorldFactory _factory;
+
+    [Inject]
+    public void Construct(FoodItemWorldFactory factory)
     {
-        if (foodItem != null)
-        {
-            UpdateVisuals();
-            return;
-        }
-
-        if (foodType != null)
-        {
-            foodItem = new FoodItem(foodType);
-            UpdateVisuals();
-            Debug.Log($"FoodItemWorld {gameObject.name} инициализирован с типом {foodType.DisplayName}");
-        }
-        else
-            Debug.LogError($"FoodItemWorld {gameObject.name} - foodType не назначен!");
-
-    }
-
-    private void Update()
-    {
-        if (foodItem != null)
-        {
-            UpdateVisuals();
-        }
+        _factory = factory;
+        _visualizer = GetComponent<FoodVisualizer>(); 
     }
 
     public void InitializeWithItem(FoodItem item)
     {
         foodItem = item;
-        UpdateVisuals();
-    }
 
-    private void UpdateVisuals()
-    {
-        if (foodItem == null || itemRenderer == null) return;
-        itemRenderer.material.color = GetStateColor();
+        _visualizer.Initialize(_factory);
+        item.OnStateChanged += _visualizer.SetState;
+        _visualizer.SetState(foodItem.CurrentState);
     }
 
     public bool CanInteract(PlayerInteraction player)
@@ -77,20 +57,6 @@ public class FoodItemWorld : MonoBehaviour, IHoldable, IInteractable
     {
         this.isHeld = isHeld;
         gameObject.SetActive(!isHeld);
-    }
-
-    private Color GetStateColor()
-    {
-        if (foodItem == null) return Color.white;
-
-        return foodItem.CurrentState switch
-        {
-            RawState => new Color(0.6f, 0.3f, 0.0f), // Brown color 
-            CookingState => new Color(1.0f, 0.5f, 0.0f), // Orange color
-            CookedState => Color.yellow,
-            BurnedState => Color.black,
-            _ => Color.white
-        };
     }
 
     private string GetStateText()

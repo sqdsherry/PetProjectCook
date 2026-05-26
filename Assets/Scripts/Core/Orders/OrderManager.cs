@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 [DefaultExecutionOrder(-100)]
 public class OrderManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class OrderManager : MonoBehaviour
 
     public event Action<OrderInstance> OnOrderSpawned;
     public event Action<OrderInstance> OnOrderCompleted;
+    public event Action<OrderInstance> OnOrderExpired;
 
     private void Start()
     {

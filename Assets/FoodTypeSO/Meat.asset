@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 918c1b198535fe24fa53e5389885317a, type: 3}
   m_Name: Meat
   m_EditorClassIdentifier: 
-  visualPrefab: {fileID: 1152488468739685640, guid: 036b1670213934c4c9827b55df63ba0b, type: 3}
+  visualPrefab: {fileID: 5128031568646129696, guid: 8a5b7dd00dadbfc43adbd30a102c3ae7, type: 3}
   DisplayName: Meat
   BaseCookTime: 3
   BurnTime: 5

@@ -1,7 +1,7 @@
 using UnityEngine;
-using Zenject; 
+using Zenject;
 
-public class DeliveryPointMono : MonoBehaviour, IInteractable
+public sealed class DeliveryPointMono : MonoBehaviour, IInteractable
 {
     private OrderManager _orderManager;
 
@@ -13,19 +13,21 @@ public class DeliveryPointMono : MonoBehaviour, IInteractable
 
     public bool CanInteract(PlayerInteraction player)
     {
+        if (player == null) return false;
         return player.HasItem;
+    }
+
+
+    public void Interact(PlayerInteraction player)
+    {
+        if (!player.HasItem) return;
+
+        if (_orderManager.TryDeliver(player.HeldItem))
+            player.Drop();
     }
 
     public string GetInteractionText()
     {
-        return "Поставить на стол заказов";
-    }
-
-    public void Interact(PlayerInteraction player)
-    {
-        if (!player.HasItem) return;  
-
-        if (_orderManager.TryDeliver(player.HeldItem))
-            player.Drop();
+        return "Put on the delivery table";
     }
 }

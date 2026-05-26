@@ -4,6 +4,7 @@ public sealed class GarbageMono : MonoBehaviour, IInteractable
 {
     public bool CanInteract(PlayerInteraction player)
     {
+        if (player == null) return false;
         return player.HasItem;
     }
 
@@ -14,12 +15,12 @@ public sealed class GarbageMono : MonoBehaviour, IInteractable
             FoodItem item = player.HeldItem;
             player.Drop();
 
-            Debug.Log($"Выбросил в мусорку {item.Type.DisplayName}");
+            Debug.Log($"Threw it in the trash {item.Type.DisplayName}");
         }
     }
 
     public string GetInteractionText()
     {
-        return "Выбросить предмет";
+        return "Throw away an item";
     }
 }

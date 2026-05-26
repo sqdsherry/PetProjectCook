@@ -15,11 +15,13 @@ public class PlayerInteraction : MonoBehaviour
     public FoodItem HeldItem => heldItem;
 
     private DiContainer _container;
+    private ItemDropper _dropper;
 
     [Inject]
-    public void Construct(DiContainer container)
+    public void Construct(DiContainer container, FoodItemWorldFactory factory)
     {
         _container = container;
+        _dropper = new ItemDropper(factory);
     }
 
     private void Update()
@@ -65,19 +67,38 @@ public class PlayerInteraction : MonoBehaviour
 
     public void TryInteract()
     {
-        if (currentTarget is MonoBehaviour mb) 
+        Debug.Log($"Попытка взаимодействия... Текущий таргет: {currentTarget}");
+
+        if (currentTarget == null)
+        {
+            Debug.LogWarning("currentTarget равен null! Проверь, как работает Raycast/Trigger.");
+            return;
+        }
+
+        if (currentTarget is MonoBehaviour mb)
         {
             Debug.Log($"Взаимодействую с: {mb.gameObject.name}");
             currentTarget.Interact(this);
+        }
+        else
+        {
+            Debug.Log($"Объект {currentTarget.GetType()} не является MonoBehaviour!");
         }
     }
 
     public void PickUp(FoodItemWorld itemWorld)
     {
         if (heldItem != null) return;
-        heldItem = itemWorld.GetHeldItem();
-        Destroy(itemWorld.gameObject);
 
+        FoodItem item = itemWorld.GetHeldItem();
+        if (item == null)
+        {
+            Debug.LogError("Ошибка: объект FoodItemWorld не инициализирован (foodItem == null)!");
+            return;
+        }
+
+        heldItem = item;
+        Destroy(itemWorld.gameObject);
         Debug.Log($"Поднят: {heldItem.Type.DisplayName}");
     }
 
@@ -98,14 +119,9 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (heldItem == null) return;
 
-        FoodItemWorld prefab = heldItem.Type.visualPrefab;
-        if (prefab == null) return;
+        Vector3 dropPosition = transform.position + transform.forward + Vector3.up * 0.5f;
+        FoodItemWorld spawnedItem = _dropper.Drop(heldItem, dropPosition);
 
-        var dropPosition = transform.position + transform.forward + Vector3.up * 0.5f;
-        var worldItem = _container.InstantiatePrefabForComponent<FoodItemWorld>(prefab, dropPosition, Quaternion.identity, null);
-        worldItem.InitializeWithItem(heldItem);
         heldItem = null;
-
-        Debug.Log("Предмет выброшен на пол");
     }
 }
