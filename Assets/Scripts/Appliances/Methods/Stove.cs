@@ -14,7 +14,6 @@ public class Stove : ICookingMethod
 
     public void Stop(FoodItem item)
     {
-        // выключить ефекты/звук
-        // ничего не сбрасываем: прогресс/состо€ние управл€ютс€ в State/ FoodItem
+        // ефекты/звук
     }
 }

@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using Zenject;
 
 public sealed class StoveMono : BaseApplianceMono
 {
@@ -25,6 +23,13 @@ public sealed class StoveMono : BaseApplianceMono
             return true;
 
         return false;
+    }
+
+    protected override void OnItemPlaced(FoodItem item)
+    {
+        base.OnItemPlaced(item);
+
+        item.ApplyMethod(Method);
     }
 
     public override string GetInteractionText()

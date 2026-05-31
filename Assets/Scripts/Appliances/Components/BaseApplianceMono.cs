@@ -24,9 +24,15 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
 
     public void Place(FoodItem item)
     {
-        if (IsOccupied || item == null) return;
+        Debug.Log($"[Place] Пытаюсь положить {item.Type.name} в {gameObject.name}");
+        if (IsOccupied)
+        {
+            Debug.LogWarning("ВНИМАНИЕ: Плита уже занята!");
+            return;
+        }
 
         PlacedData = item;
+        Debug.Log($"[Place] PlacedData установлена в {PlacedData.Type.name}. IsOccupied теперь: {IsOccupied}");
         OnItemPlaced(item); 
 
         Vector3 spawnPosition = itemPlacePosition != null ? itemPlacePosition.position : transform.position + Vector3.up;
@@ -36,8 +42,10 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
         PlacedVisual.transform.SetParent(transform);
         PlacedVisual.InitializeWithItem(item);
     }
+
     public FoodItem Remove()
     {
+        Debug.Log("Attempting to remove item from appliance...");
         if (!IsOccupied) return null;
 
         FoodItem item = PlacedData;
@@ -61,6 +69,7 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
 
     public virtual void Interact(PlayerInteraction player)
     {
+        Debug.Log($"Player is interacting with {gameObject.name}... IsOccupied: {IsOccupied}, PlayerHasItem: {player.HasItem}");
         if (!CanInteract(player)) return;
 
         if (player.HasItem && !IsOccupied)
@@ -69,6 +78,7 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
         }
         else if (!player.HasItem && IsOccupied)
         {
+            Debug.Log("Player is interacting to pick up item from appliance...");
             HandlePickup(player);
         }
     }
@@ -82,13 +92,18 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
 
     protected virtual void HandlePickup(PlayerInteraction player)
     {
+        Debug.Log("Player is interacting");
         FoodItem item = Remove(); 
         player.PickUp(item);
     }
 
     protected virtual void OnItemPlaced(FoodItem item) {}
 
-    protected virtual void OnItemRemoved(FoodItem item) {}
+    protected virtual void OnItemRemoved(FoodItem item) 
+    {
+        Debug.Log($"Item removed: {item.Type.name}");
+        item.ClearMethod();
+    }
 
     public abstract string GetInteractionText();
 }

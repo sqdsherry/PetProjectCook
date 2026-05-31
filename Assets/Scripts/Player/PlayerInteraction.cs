@@ -100,6 +100,7 @@ public class PlayerInteraction : MonoBehaviour
         heldItem = item;
         Destroy(itemWorld.gameObject);
         Debug.Log($"Поднят: {heldItem.Type.DisplayName}");
+        currentTarget = null;
     }
 
     public void PickUp(FoodItem item)

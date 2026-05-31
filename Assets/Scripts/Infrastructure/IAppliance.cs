@@ -5,4 +5,5 @@ public interface IAppliance
     void Place(FoodItem item);
     FoodItem Remove();
     void Tick(float deltaTime);
+    void Interact(PlayerInteraction player);
 }

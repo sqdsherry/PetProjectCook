@@ -56,7 +56,15 @@ public sealed class FoodItem
         CurrentMethod = null;
     }
 
-    public void Tick(float dt) => CurrentState?.Tick(this, dt);
+    public void Tick(float dt)
+    {
+        if (CurrentState is CookingState && CurrentMethod == null)
+        {
+            return;
+        }
+
+        CurrentState?.Tick(this, dt);
+    }
 
     public void ApplyMethod(ICookingMethod method)
     {

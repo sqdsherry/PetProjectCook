@@ -21,13 +21,15 @@ public class FoodVisualizer : MonoBehaviour
             RawState => visuals.rawPrefab,
             CookedState => visuals.cookedPrefab,
             BurnedState => visuals.burnedPrefab,
+            CookingState => _currentVisual != null ? _currentVisual : visuals.rawPrefab, 
             _ => null
         };
 
         if (prefabToSpawn == null) return;
 
-        if (_currentVisual != null) Destroy(_currentVisual);
+        if (_currentVisual != null && prefabToSpawn == _currentVisual) return;
 
+        if (_currentVisual != null) Destroy(_currentVisual);
         _currentVisual = _factory.CreateVisual(prefabToSpawn, transform);
     }
 }

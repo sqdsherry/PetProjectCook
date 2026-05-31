@@ -47,7 +47,13 @@ public class FoodItemWorld : MonoBehaviour, IHoldable, IInteractable
 
     public void Interact(PlayerInteraction player)
     {
-        if (CanInteract(player))
+        IAppliance appliance = GetComponentInParent<IAppliance>();
+
+        if (appliance != null)
+        {
+            appliance.Interact(player);
+        }
+        else if (CanInteract(player))
         {
             player.PickUp(this);
         }
@@ -71,5 +77,13 @@ public class FoodItemWorld : MonoBehaviour, IHoldable, IInteractable
             BurnedState => "сгоревший",
             _ => "неизвестно"
         };
+    }
+
+    private void OnDestroy()
+    {
+        if (foodItem != null)
+        {
+            foodItem.OnStateChanged -= _visualizer.SetState;
+        }
     }
 }
