@@ -3,17 +3,6 @@ using Zenject;
 
 public sealed class TableMono : BaseApplianceMono
 {
-    [SerializeField] private FoodTypeSO debugType;
-
-    private void Start()
-    {
-        if (debugType != null)
-        {
-            var item = new FoodItem(debugType);
-            Place(item);
-        }
-    }
-
     public override bool CanInteract(PlayerInteraction player)
     {
         if (player == null) return false;

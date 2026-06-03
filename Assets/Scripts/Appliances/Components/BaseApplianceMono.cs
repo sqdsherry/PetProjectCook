@@ -24,19 +24,16 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
 
     public void Place(FoodItem item)
     {
-        Debug.Log($"[Place] Пытаюсь положить {item.Type.name} в {gameObject.name}");
         if (IsOccupied)
         {
-            Debug.LogWarning("ВНИМАНИЕ: Плита уже занята!");
             return;
         }
 
         PlacedData = item;
-        Debug.Log($"[Place] PlacedData установлена в {PlacedData.Type.name}. IsOccupied теперь: {IsOccupied}");
         OnItemPlaced(item); 
 
         Vector3 spawnPosition = itemPlacePosition != null ? itemPlacePosition.position : transform.position + Vector3.up;
-        PlacedVisual = FoodItemFactory.Create();
+        PlacedVisual = FoodItemFactory.Create(item.Type.visualPrefab);
         PlacedVisual.transform.position = spawnPosition;
         PlacedVisual.transform.rotation = Quaternion.identity;
         PlacedVisual.transform.SetParent(transform);
@@ -69,7 +66,6 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
 
     public virtual void Interact(PlayerInteraction player)
     {
-        Debug.Log($"Player is interacting with {gameObject.name}... IsOccupied: {IsOccupied}, PlayerHasItem: {player.HasItem}");
         if (!CanInteract(player)) return;
 
         if (player.HasItem && !IsOccupied)
@@ -78,7 +74,6 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
         }
         else if (!player.HasItem && IsOccupied)
         {
-            Debug.Log("Player is interacting to pick up item from appliance...");
             HandlePickup(player);
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -25,10 +26,21 @@ public sealed class FoodItem
 
     public event Action<IFoodState> OnStateChanged;
 
+    private List<FoodTypeSO> ingredients;
+
+    public IReadOnlyList<FoodTypeSO> Ingredients => ingredients ?? new List<FoodTypeSO>();
+
     public FoodItem(FoodTypeSO type)
     {
         Type = type;
+        ingredients = new List<FoodTypeSO> { type };
         SetState(new RawState());
+    }
+
+    public void AddIngredient(FoodTypeSO ingredientType)
+    {
+        ingredients ??= new List<FoodTypeSO>();
+        ingredients.Add(ingredientType);
     }
 
     public void SetState(IFoodState nextState)

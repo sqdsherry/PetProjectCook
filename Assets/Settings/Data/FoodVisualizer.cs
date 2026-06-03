@@ -15,7 +15,6 @@ public class FoodVisualizer : MonoBehaviour
 
     public void SetState(IFoodState state)
     {
-        // 1. Выбираем, какой префаб нам нужен
         GameObject prefabToSpawn = state switch
         {
             RawState => visuals.rawPrefab,

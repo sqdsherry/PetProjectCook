@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 public class FoodSpawner : MonoBehaviour
 {
-    [SerializeField] private FoodTypeSO foodTypeToSpawn;
+    [SerializeField] private List<FoodTypeSO> foodsTypeToSpawn;
     [SerializeField] private Transform spawnPoint;
 
     private FoodItemWorldFactory _factory;
@@ -16,17 +17,20 @@ public class FoodSpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnFood();
+        foreach (var foodType in foodsTypeToSpawn)
+        {
+            SpawnFood(foodType);
+        }
     }
 
-    private void SpawnFood()
+    private void SpawnFood(FoodTypeSO spawnFoodItem)
     {
-        if (foodTypeToSpawn == null) return;
+        if (spawnFoodItem == null) return;
 
-        FoodItem newItem = new FoodItem(foodTypeToSpawn);
+        FoodItem newItem = new FoodItem(spawnFoodItem);
         newItem.SetState(new RawState());
 
-        FoodItemWorld worldItem = _factory.Create();
+        FoodItemWorld worldItem = _factory.Create(newItem.Type.visualPrefab);
 
         Vector3 position = spawnPoint != null ? spawnPoint.position : transform.position;
         worldItem.transform.position = position;

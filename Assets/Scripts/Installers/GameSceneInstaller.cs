@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameSceneInstaller : MonoInstaller {
     [SerializeField] private OrderManager orderManager;
     [SerializeField] private OrderUIManager orderUIManager;
-    [SerializeField] private GameObject foodItemWorldPrefab;
+    [SerializeField] private RecipeDatabaseSO recipeDatabase;
 
     public override void InstallBindings() {
         Container.Bind<OrderManager>()
@@ -15,8 +15,13 @@ public class GameSceneInstaller : MonoInstaller {
             .FromInstance(orderUIManager)
             .AsSingle();
 
-        Container.BindFactory<FoodItemWorld, FoodItemWorldFactory>()
-            .FromComponentInNewPrefab(foodItemWorldPrefab);
+        Container.BindFactory<FoodTypeSO, FoodItem, FoodItem.Factory>();
+
+        Container.BindFactory<GameObject, FoodItemWorld, FoodItemWorldFactory>()
+                     .FromFactory<FoodItemWorldFactory>();
+
+        Container.BindInstance(recipeDatabase);
+        Container.Bind<RecipeMatcher>().AsSingle();
 
         Container.Bind<Stove>().AsSingle();
         Container.Bind<Fryer>().AsSingle();

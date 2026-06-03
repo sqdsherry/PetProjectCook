@@ -67,22 +67,14 @@ public class PlayerInteraction : MonoBehaviour
 
     public void TryInteract()
     {
-        Debug.Log($"Попытка взаимодействия... Текущий таргет: {currentTarget}");
-
         if (currentTarget == null)
         {
-            Debug.LogWarning("currentTarget равен null! Проверь, как работает Raycast/Trigger.");
             return;
         }
 
         if (currentTarget is MonoBehaviour mb)
         {
-            Debug.Log($"Взаимодействую с: {mb.gameObject.name}");
             currentTarget.Interact(this);
-        }
-        else
-        {
-            Debug.Log($"Объект {currentTarget.GetType()} не является MonoBehaviour!");
         }
     }
 
