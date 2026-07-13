@@ -25,5 +25,7 @@ public class GameSceneInstaller : MonoInstaller {
 
         Container.Bind<Stove>().AsSingle();
         Container.Bind<Fryer>().AsSingle();
+
+        Container.Bind<ItemDropper>().AsSingle();
     }
 }

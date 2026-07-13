@@ -8,7 +8,7 @@ public class FoodSpawner : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
 
     private FoodItemWorldFactory _worldFactory;
-    private FoodItem.Factory _foodFactory; 
+    private FoodItem.Factory _foodFactory;
 
     [Inject]
     public void Construct(FoodItemWorldFactory worldFactory, FoodItem.Factory foodFactory)

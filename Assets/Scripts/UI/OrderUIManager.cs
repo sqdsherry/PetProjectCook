@@ -15,20 +15,10 @@ public class OrderUIManager : MonoBehaviour
     public void Construct(OrderManager orderManager)
     {
         _orderManager = orderManager;
-    }
 
-    private void OnEnable()
-    {
         _orderManager.OnOrderSpawned += HandleOrderSpawned;
         _orderManager.OnOrderCompleted += HandleOrderRemoved;
         _orderManager.OnOrderExpired += HandleOrderRemoved;
-    }
-
-    private void OnDisable()
-    {
-        _orderManager.OnOrderSpawned -= HandleOrderSpawned;
-        _orderManager.OnOrderCompleted -= HandleOrderRemoved;
-        _orderManager.OnOrderExpired -= HandleOrderRemoved;
     }
 
     private void HandleOrderSpawned(OrderInstance order)
@@ -47,5 +37,15 @@ public class OrderUIManager : MonoBehaviour
 
         Destroy(card.gameObject);
         _cards.Remove(order);
+    }
+
+    private void OnDestroy()
+    {
+        if (_orderManager != null)
+        {
+            _orderManager.OnOrderSpawned -= HandleOrderSpawned;
+            _orderManager.OnOrderCompleted -= HandleOrderRemoved;
+            _orderManager.OnOrderExpired -= HandleOrderRemoved;
+        }
     }
 }
