@@ -64,15 +64,12 @@ public class RecipeMatcher
     {
         completedRecipe = null;
 
-        // 1. Дебаг входных данных
         if (currentIngredients == null) { Debug.LogError("currentIngredients list is NULL!"); return false; }
 
-        // 2. Дебаг базы
         if (_recipeDatabase == null || _recipeDatabase.AllRecipes == null) { Debug.LogError("Database is NULL!"); return false; }
 
         foreach (RecipeSO recipe in _recipeDatabase.AllRecipes)
         {
-            // 3. Дебаг конкретного рецепта
             if (recipe == null) { Debug.LogWarning("Найден пустой рецепт в базе!"); continue; }
             if (recipe.RequiredIngredients == null) { Debug.LogWarning($"Рецепт {recipe.name} имеет NULL список RequiredIngredients!"); continue; }
 

@@ -13,24 +13,9 @@ public sealed class TableMono : BaseApplianceMono
     {
         if (IsOccupied && PlacedData != null)
         {
-            string stateText = GetStateText(PlacedData);
-            return $"Take {PlacedData.Type.DisplayName} ({stateText})";
+            return $"Take {PlacedData.Type.DisplayName} ({PlacedData.CurrentState.ToDisplayText()})";
         }
 
-        return "Place on table";
-    }
-
-    private string GetStateText(FoodItem item)
-    {
-        if (item == null) return "unknown";
-
-        return item.CurrentState switch
-        {
-            RawState => "Raw",
-            CookingState => "Cooking",
-            CookedState => "Cooked",
-            BurnedState => "Burned",
-            _ => "unknown"
-        };
+        return "Put on the stove";
     }
 }

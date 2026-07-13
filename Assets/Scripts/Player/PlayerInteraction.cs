@@ -14,14 +14,17 @@ public class PlayerInteraction : MonoBehaviour
     // public IHoldable HeldItem => heldItem;
     public FoodItem HeldItem => heldItem;
 
-    private DiContainer _container;
     private ItemDropper _dropper;
 
     [Inject]
-    public void Construct(DiContainer container, FoodItemWorldFactory factory)
+    public void Construct(ItemDropper dropper)
     {
-        _container = container;
-        _dropper = new ItemDropper(factory);
+        _dropper = dropper; 
+    }
+
+    public void TryInteract()
+    {
+        currentTarget?.Interact(this); 
     }
 
     private void Update()
@@ -62,20 +65,6 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         currentTarget = closestInteractable;
-    }
-
-
-    public void TryInteract()
-    {
-        if (currentTarget == null)
-        {
-            return;
-        }
-
-        if (currentTarget is MonoBehaviour mb)
-        {
-            currentTarget.Interact(this);
-        }
     }
 
     public void PickUp(FoodItemWorld itemWorld)

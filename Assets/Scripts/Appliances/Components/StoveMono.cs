@@ -36,22 +36,9 @@ public sealed class StoveMono : BaseApplianceMono
     {
         if (IsOccupied && PlacedData != null)
         {
-            string stateText = GetStateText(PlacedData);
-            return $"Take {PlacedData.Type.DisplayName} ({stateText})";
+            return $"Take {PlacedData.Type.DisplayName} ({PlacedData.CurrentState.ToDisplayText()})";
         }
 
         return "Put on the stove";
-    }
-
-    private string GetStateText(FoodItem item)
-    {
-        return item.CurrentState switch
-        {
-            RawState => "Raw",
-            CookingState => "Coocking",
-            CookedState => "Ready",
-            BurnedState => "Burnt",
-            _ => "unknown"
-        };
     }
 }

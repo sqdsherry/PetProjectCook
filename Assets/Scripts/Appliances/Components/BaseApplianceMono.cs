@@ -24,18 +24,18 @@ public abstract class BaseApplianceMono : MonoBehaviour, IAppliance, IInteractab
 
     public void Place(FoodItem item)
     {
-        if (IsOccupied)
-        {
-            return;
-        }
+        if (IsOccupied) return;
 
         PlacedData = item;
-        OnItemPlaced(item); 
+        CreateVisualForItem(item); 
+        OnItemPlaced(item);
+    }
 
+    private void CreateVisualForItem(FoodItem item)
+    {
         Vector3 spawnPosition = itemPlacePosition != null ? itemPlacePosition.position : transform.position + Vector3.up;
         PlacedVisual = FoodItemFactory.Create(item.Type.visualPrefab);
-        PlacedVisual.transform.position = spawnPosition;
-        PlacedVisual.transform.rotation = Quaternion.identity;
+        PlacedVisual.transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
         PlacedVisual.transform.SetParent(transform);
         PlacedVisual.InitializeWithItem(item);
     }
